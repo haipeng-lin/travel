@@ -8,7 +8,12 @@ import com.wen.shuzhi.loginRegister.entity.R;
 import com.wen.shuzhi.loginRegister.entity.User;
 import com.wen.shuzhi.loginRegister.entity.UserDTO;
 import com.wen.shuzhi.loginRegister.service.Impl.UserServiceImpl;
-import com.wen.shuzhi.loginRegister.utils.UserHolder;
+import com.wen.shuzhi.rusticTourism.entity.Comment;
+import com.wen.shuzhi.rusticTourism.entity.Favorite;
+import com.wen.shuzhi.rusticTourism.entity.Like;
+import com.wen.shuzhi.rusticTourism.service.Impl.CommentServiceImpl;
+import com.wen.shuzhi.rusticTourism.service.Impl.FavoriteServiceImpl;
+import com.wen.shuzhi.rusticTourism.service.Impl.LikeServiceImpl;
 import com.wen.shuzhi.rusticTourism.utils.UploadUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -40,6 +44,15 @@ public class UserController {
 
     @Autowired
     private UserServiceImpl userService;
+
+    @Autowired
+    private LikeServiceImpl likeService;
+
+    @Autowired
+    private FavoriteServiceImpl favoriteService;
+
+    @Autowired
+    private CommentServiceImpl commentService;
 
     @Value("${photo.file.dir}") //获取application.yml配置文件中的属性
     public String realPath;     //获取文件上传后的路径
@@ -241,6 +254,7 @@ public class UserController {
     @GetMapping("/user")
     public R showAttractions(@RequestParam(value = "account",required = false)String account,
                              @RequestParam(value ="username",required = false)String username,
+                             @RequestParam(value ="role",required = false)String role,
                              @RequestParam(value="pn",required = false,defaultValue = "1")Integer pn){
 
         log.info("用户账号:"+account+",省份:"+username+",查询的第几页:"+pn);
@@ -261,6 +275,10 @@ public class UserController {
         //有用户名
         if(!StringUtils.isEmpty(username)){
             wrapper.like("username",username);
+        }
+
+        if(!StringUtils.isEmpty(role)){
+            wrapper.eq("role",role);
         }
 
         Page<User> page = userService.page(searchPage,wrapper);
@@ -350,14 +368,8 @@ public class UserController {
         Boolean isDelete = stringRedisTemplate.delete(key);
         log.info("isDelete:"+isDelete);
 
-        //2、删除UserHolder中的account信息
-        UserDTO user = UserHolder.getUser();
-        UserHolder.removeUser();
-
-        log.info("用户信息:"+ user);
-
         //3、请求转发回到首页
-        return new R(true,"用户名为"+user.getUsername()+"的用户成功退出系统");
+        return new R(true,"成功退出系统!");
     }
 
 
@@ -373,5 +385,38 @@ public class UserController {
 //        }
 //        return new R(true,"温馨提示:成功修改用户名为"+userServicegetUsername()+"的用户的密码");
 //    }
+
+
+
+    //获取用户点赞、收藏、评论数量
+    @GetMapping("getLikeAndFavoriteAndCommentNum")
+    public R getLikeAndFavoriteAndCommentNum(@RequestParam("userId")Integer userId){
+        log.info("查询的用户id:"+userId);
+
+        //点赞条件构造器
+        QueryWrapper<Like> likeQueryWrapper= new QueryWrapper<>();
+        QueryWrapper<Favorite> favoriteQueryWrapper= new QueryWrapper<>();
+        QueryWrapper<Comment> commentQueryWrapper= new QueryWrapper<>();
+
+        //加入where条件
+        likeQueryWrapper.eq("user_id",userId);
+        favoriteQueryWrapper.eq("user_id",userId);
+        commentQueryWrapper.eq("user_id",userId);
+        int likeCount = likeService.count(likeQueryWrapper);
+        int favoriteCount = favoriteService.count(favoriteQueryWrapper);
+        int commentCount = commentService.count(commentQueryWrapper);
+
+        log.info("likeCount:"+likeCount);
+        log.info("favoriteCount:"+favoriteCount);
+        log.info("commentCount:"+commentCount);
+        HashMap<String, Integer> ret = new HashMap<>();
+        ret.put("likeCount",likeCount);
+        ret.put("favoriteCount",favoriteCount);
+        ret.put("commentCount",commentCount);
+        return new R(true,ret,"获取用户点赞、收藏、评论数量如下");
+
+
+
+    }
 
 }

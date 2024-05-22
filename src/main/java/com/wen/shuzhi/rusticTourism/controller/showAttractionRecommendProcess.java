@@ -54,6 +54,9 @@ public class showAttractionRecommendProcess {
 
         log.info("查询的用户id:"+userId);
         TagRecommendRes tagRecommendRes = userManageService.getTagRecommendResByUserId(userId);
+        if(tagRecommendRes==null){
+            return new R(false,"用户没有任何景点行为(点击、点赞、收藏、评论、浏览");
+        }
 
         List<String> tagNameList = Arrays.asList((tagRecommendRes.getTagNameList()).split(","));
         List<String> tagWeightList = Arrays.asList((tagRecommendRes.getTagWeightList()).split(","));

@@ -170,6 +170,11 @@ public class AttractionServiceImpl extends ServiceImpl<AttractionMapper, Attract
         return attractionMapper.addAttractionBrowseTime(attractionId,browseTime);
     }
 
+    @Override
+    public int getCityIdByCityName(String cityName) {
+        return attractionMapper.getCityIdByCityName(cityName);
+    }
+
 
 }
 

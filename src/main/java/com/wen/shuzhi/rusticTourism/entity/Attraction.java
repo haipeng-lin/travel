@@ -33,6 +33,13 @@ public class Attraction {
     private Date addTime;           //添加时间
     private Date updateTime;        //修改时间
 
+    public Attraction(String attractionName, String location, Integer likes, Integer collections, Integer comments) {
+        this.attractionName = attractionName;
+        this.location = location;
+        this.likes = likes;
+        this.collections = collections;
+        this.comments = comments;
+    }
 
     public Attraction(String attractionName, String location, String introduction, String strategy, String imageUrl, Integer clicks, Integer likes, Integer collections, Integer comments, Integer browseTime, String tag, String keyWord, Date addTime, Date updateTime) {
         this.attractionName = attractionName;

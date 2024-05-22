@@ -25,6 +25,13 @@ public class User implements Serializable {
     private Date addTime;
     private Date updateTime;
 
+    public User(String username,String password, Integer age,String sex,String email) {
+        this.password = password;
+        this.username = username;
+        this.sex = sex;
+        this.age = age;
+        this.email=email;
+    }
 
     public User(String account, String password, String username, String avatarImageUrl, String sex, Integer age, String email, String role, Date addTime, Date updateTime) {
         this.account = account;

@@ -18,6 +18,6 @@ public class MyPicConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/imgs/**")
-                .addResourceLocations("file:F:/code/Project/ShuZhiXC/src/main/resources/static/imgs/");
+                .addResourceLocations("file:D:\\peng\\code\\Project\\ShuZhi\\ShuZhiXC\\src\\main\\resources\\static\\imgs");
     }
 }

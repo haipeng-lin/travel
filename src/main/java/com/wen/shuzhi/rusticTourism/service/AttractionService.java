@@ -84,5 +84,8 @@ public interface AttractionService extends IService<Attraction> {
 
     int addAttractionBrowseTime(Integer attractionId, long browseTime);
 
+    // 通过城市名获取城市的id
+    int getCityIdByCityName(String cityName);
+
 }
 

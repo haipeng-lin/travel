@@ -143,4 +143,6 @@ public interface AttractionMapper extends BaseMapper<Attraction> {
     @Update("update attraction set clicks=clicks+1 where attraction_id=#{attractionId}")
     int addAttractionClickNum(Integer attractionId);
 
+    @Select("select city_number from city where city_name=#{cityName}")
+    int getCityIdByCityName(String cityName);
 }

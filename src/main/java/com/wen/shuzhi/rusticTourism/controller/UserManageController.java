@@ -93,14 +93,24 @@ public class UserManageController {
         if(behaviorRecommendRes!=null){
             retMap.put("behaviorRecommendRes",behaviorRecommendRes);
         }
+//        if(tagRecommendRes==null && behaviorRecommendRes==null){
+//            return new R(false,"该用户还没有使用乡村旅游模块！需有景点推荐结果！！！");
+//        }
         if (sum < policyDivision) {
             //跳转 基于标签的推荐分析
 
             retMap.put("html","userSpecificInfoByTag");
+            if(tagRecommendRes==null){
+                //该用户还没有被推荐
+                return new R(false,retMap,"没有推荐结果，用户景点行为权重如下");
+            }
             return new R(true,retMap,"基于标签的推荐分析结果如下");
         } else {
             //跳转 基于用户行为协同过滤的推荐分析
             retMap.put("html","userSpecificInfoByUserBehavior");
+            if(behaviorRecommendRes==null){
+                return new R(false,retMap,"没有推荐结果，用户景点行为权重如下");
+            }
             return new R(true,retMap,"基于用户行为协同过滤的推荐分析结果如下");
 
         }

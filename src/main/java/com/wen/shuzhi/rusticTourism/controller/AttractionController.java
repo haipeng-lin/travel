@@ -73,12 +73,19 @@ public class AttractionController {
         log.info("提交的景点信息:"+ attraction.toString());
 
         //1、检查是否已经填了全部信息
+//        if(attraction.getAttractionName().isEmpty() || attraction.getLocation().isEmpty() ||
+//                attraction.getIntroduction().isEmpty() || attraction.getStrategy().isEmpty() ||
+//                attraction.getLikes()==null || attraction.getCollections()==null ||
+//                attraction.getComments()==null || attraction.getClicks()==null ||
+//                attraction.getBrowseTime()==null || attraction.getKeyWord().isEmpty()||
+//                attraction.getTag().isEmpty() || multipartFile==null){
+//
+//            //1.1、有信息尚未填写
+//            return new R(false,"添加失败,景点信息还未完全填写,请检查");
+//        }
         if(attraction.getAttractionName().isEmpty() || attraction.getLocation().isEmpty() ||
-                attraction.getIntroduction().isEmpty() || attraction.getStrategy().isEmpty() ||
                 attraction.getLikes()==null || attraction.getCollections()==null ||
-                attraction.getComments()==null || attraction.getClicks()==null ||
-                attraction.getBrowseTime()==null || attraction.getKeyWord().isEmpty()||
-                attraction.getTag().isEmpty() || multipartFile==null){
+                attraction.getComments()==null ){
 
             //1.1、有信息尚未填写
             return new R(false,"添加失败,景点信息还未完全填写,请检查");
@@ -91,14 +98,14 @@ public class AttractionController {
 
         //2.1、设置照片访问路径
         // （1）根据时间戳生成照片新文件名
-        String newFileName = new UploadUtils().getNewFileName(multipartFile,realPath);
-        log.info("上传的图片在服务器的路径===="+realPath);
-        log.info("上传的图片在服务器对应的文件名称为"+newFileName);
-
-        //（2）设置照片的访问路径
-        String imageUrl="http://localhost:8081/imgs/"+newFileName;
-        log.info("存储到数据库的图片访问路径为"+imageUrl);
-        attraction.setImageUrl(imageUrl);
+        //String newFileName = new UploadUtils().getNewFileName(multipartFile,realPath);
+//        log.info("上传的图片在服务器的路径===="+realPath);
+//        log.info("上传的图片在服务器对应的文件名称为"+newFileName);
+//
+//        //（2）设置照片的访问路径
+//        String imageUrl="http://localhost:8081/imgs/"+newFileName;
+//        log.info("存储到数据库的图片访问路径为"+imageUrl);
+//        attraction.setImageUrl(imageUrl);
 
         //2.2、设置时间
         attraction.setAddTime(new java.sql.Date(new Date().getTime()));

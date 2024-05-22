@@ -1,18 +1,18 @@
-
 server:
   port: 8081
 
 spring:
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/xiangcun?useUnicode=true&characterEncoding=utf8
     username: root
-    password: 123456
+    password: 19720603
 
   redis:
-    host: 192.168.111.100
-    port: 6379
-    password: 123321
+    host: 192.168.234.128
+    port: 6124
+    password: 123456
     lettuce:
       pool:
         max-active: 10
@@ -30,7 +30,7 @@ spring:
   #图片上传的位置
   web:
     resources:
-      static-locations: classpath:/static/imgs
+      static-locations: classpath:/static
 
 # 验证码配置
 kaptcha:
@@ -64,12 +64,16 @@ logging:
 
 
 #上传到服务端的图片文件夹
+# dev开发环境
 photo:
   file:
-    dir: F:\code\Project\ShuZhiXC\src\main\resources\static\imgs
+    dir: D:\peng\code\Project\ShuZhi\ShuZhiXC\src\main\resources\static\imgs
 
 
-
+# 上线环境
+#photo:
+#  file:
+#    dir: /tmp/images/shuzhi
 
 
 

@@ -13,12 +13,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/imgs/**")
+                .addResourceLocations("classpath:/static/imgs/");
+    }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -28,17 +36,22 @@ public class WebMvcConfig implements WebMvcConfigurer {
                         "/register",
                         "/kaptcha/getKaptchaImage",
                         "/checkAccount",
-                        "/imgs/**"
-                ).order(2);
+                        "/imgs/**",
+                        "/getAttractionAndWeight"
+//                        "/blog/upload-img"
+                ).order(1);
 
 
-        //拦截所有路径，除了注册路径，目的为了刷新token有效期
+        //拦截所有路径，除了注册路径，目的为了刷新token有效期，优先级最高
         registry.addInterceptor(new RefreshTokenInterceptor(stringRedisTemplate))
                 .addPathPatterns("/**")
                 .excludePathPatterns(
-                        "/user/register"
+                        "/user/register",
+                        "/imgs/**"  // 在这里添加对 "/imgs/**" 的排除
                 )
-                .order(1);
+                .order(2);
 
     }
+
+
 }

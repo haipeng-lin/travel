@@ -13,6 +13,8 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
+
+        log.info("请求路径为:"+request.getServletPath());
         //1、如果为预检请求，则直接通过：因为预检请求不会带上token请求头
         String method = request.getMethod();
         log.info("拦截器拦截请求的方法:"+method);
